@@ -1,3 +1,17 @@
+2017-07-25  Vladimir Shabanov  <vshabanoff@gmail.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.10
+
+	* Declare dependency on `hsc2hs`
+	by Herbert Valerio Riedel @hvr (#28).
+
+2017-06-08  Vladimir Shabanov  <vshabanoff@gmail.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.9
+
+	* Added -DNOCRYPT to compile in newer MINGW versions
+	by Baojun Wang @wangbj (#27)
+
 2017-04-26  Vladimir Shabanov  <vshabanoff@gmail.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.8

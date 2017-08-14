@@ -23,7 +23,7 @@ Bug-Reports:   https://github.com/vshabanov/HsOpenSSL/issues
 Category:      Cryptography
 Cabal-Version: >= 1.12
 Tested-With:
-    GHC==8.2.1, GHC==8.0.2, GHC==7.10.3, GHC==7.8.4, GHC==7.6.3, GHC==7.4.2, GHC==7.2.2
+    GHC==8.2.1, GHC==8.0.2, GHC==7.10.3
 Build-Type:    Custom
 Extra-Source-Files:
     AUTHORS
@@ -70,7 +70,7 @@ Library
         base       >= 4.4 && < 5,
         bytestring >= 0.9   && < 0.11,
         network    >= 2.1   && < 2.7,
-        time       >= 1.2   && < 1.9
+        time       >= 1.5   && < 1.9
 
     Build-Tools: hsc2hs >= 0.67
 

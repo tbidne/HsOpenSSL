@@ -32,6 +32,12 @@
 #  include "../dist/build/autogen/cabal_macros.h"
 #endif
 
+/* LibreSSL *******************************************************************/
+#if (defined LIBRESSL_VERSION_NUMBER && OPENSSL_VERSION_NUMBER == 0x20000000L)
+#undef OPENSSL_VERSION_NUMBER
+#define OPENSSL_VERSION_NUMBER 0x1000107fL
+#endif
+
 /* OpenSSL ********************************************************************/
 void HsOpenSSL_init();
 void HsOpenSSL_OPENSSL_free(void* ptr);

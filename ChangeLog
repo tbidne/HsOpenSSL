@@ -1,3 +1,10 @@
+2017-08-14  Vladimir Shabanov  <vshabanoff@gmail.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.11
+
+	* cbits/HsOpenSSL.h: Hack OpenSSL version number when using LibreSSL
+	by Javier López @TheLinuxKitten (#31)
+
 2017-07-25  Vladimir Shabanov  <vshabanoff@gmail.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.10

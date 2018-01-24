@@ -19,9 +19,9 @@ import Distribution.PackageDescription (FlagName(..))
 #endif
 
 #if MIN_VERSION_Cabal(2,1,0)
-import Distribution.Types.GenericPackageDescription (mkFlagAssignment, unFlagAssignment)
+import Distribution.PackageDescription (mkFlagAssignment, unFlagAssignment)
 #else
-import Distribution.Types.GenericPackageDescription (FlagAssignment)
+import Distribution.PackageDescription (FlagAssignment)
 #endif
 
 import Distribution.Verbosity (silent)

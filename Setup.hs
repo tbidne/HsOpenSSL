@@ -18,6 +18,12 @@ import Distribution.PackageDescription (FlagName(..), mkFlagName)
 import Distribution.PackageDescription (FlagName(..))
 #endif
 
+#if MIN_VERSION_Cabal(2,1,0)
+import Distribution.PackageDescription (mkFlagAssignment, unFlagAssignment)
+#else
+import Distribution.PackageDescription (FlagAssignment)
+#endif
+
 import Distribution.Verbosity (silent)
 import System.Info (os)
 import qualified Control.Exception as E (tryJust, throw)
@@ -27,6 +33,14 @@ import Data.List
 
 #if !(MIN_VERSION_Cabal(2,0,0))
 mkFlagName = FlagName
+#endif
+
+#if !(MIN_VERSION_Cabal(2,1,0))
+mkFlagAssignment :: [(FlagName, Bool)] -> FlagAssignment
+mkFlagAssignment = id
+
+unFlagAssignment :: FlagAssignment -> [(FlagName, Bool)]
+unFlagAssignment = id
 #endif
 
 -- On macOS we're checking whether OpenSSL library is avaiable
@@ -51,7 +65,7 @@ conf descr cfg = do
     case c of
         Right lbi -> return lbi -- library was found
         Left e
-            | configConfigurationsFlags cfg
+            | unFlagAssignment (configConfigurationsFlags cfg)
               `intersect` [(mkFlagName f, True) | f <- flags] /= [] ->
                 E.throw e
                 -- flag was set but library still wasn't found
@@ -86,7 +100,10 @@ multipleFound fs = unlines
     , "to specify location of installed OpenSSL library."
     ]
 
-setFlag f c = c { configConfigurationsFlags = go (configConfigurationsFlags c) }
+setFlag f c = c { configConfigurationsFlags = mkFlagAssignment
+                                            $ go
+                                            $ unFlagAssignment
+                                            $ configConfigurationsFlags c }
     where go [] = []
           go (x@(n, _):xs)
               | n == f = (f, True) : xs

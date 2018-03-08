@@ -2,7 +2,8 @@
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.13
 
-	* HsOpenSSL.cabal: Removed Cabal upper bound
+	* HsOpenSSL.cabal: Removed Cabal upper bound,
+	fixed Cabal-Version format.
 
 2018-01-24  Vladimir Shabanov  <vshabanoff@gmail.com>
 

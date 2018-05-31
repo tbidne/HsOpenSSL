@@ -16,7 +16,7 @@ Version:       0.11.4.14
 License:       PublicDomain
 License-File:  COPYING
 Author:        Adam Langley, Mikhail Vorozhtsov, PHO, Taru Karttunen
-Maintainer:    Vladimir Shabanov <vshabanoff@gmail.com>
+Maintainer:    Vladimir Shabanov <dev@vshabanov.com>
 Stability:     stable
 Homepage:      https://github.com/vshabanov/HsOpenSSL
 Bug-Reports:   https://github.com/vshabanov/HsOpenSSL/issues

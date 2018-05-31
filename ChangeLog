@@ -1,73 +1,73 @@
-2018-05-31  Vladimir Shabanov  <vshabanoff@gmail.com>
+2018-05-31  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.14
 
 	* HsOpenSSL.cabal: Removed upper bounds from all dependencies except
 	base where it is required.
 
-2018-03-09  Vladimir Shabanov  <vshabanoff@gmail.com>
+2018-03-09  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.13
 
 	* HsOpenSSL.cabal: Removed Cabal upper bound,
 	fixed Cabal-Version format.
 
-2018-01-24  Vladimir Shabanov  <vshabanoff@gmail.com>
+2018-01-24  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.12
 
 	* Fix the build with GHC 8.4
 	by Ryan Scott @RyanGlScott (#35)
 
-2017-08-14  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-08-14  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.11
 
 	* cbits/HsOpenSSL.h: Hack OpenSSL version number when using LibreSSL
 	by Javier López @TheLinuxKitten (#31)
 
-2017-07-25  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-07-25  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.10
 
 	* Declare dependency on `hsc2hs`
 	by Herbert Valerio Riedel @hvr (#28).
 
-2017-06-08  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-06-08  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.9
 
 	* Added -DNOCRYPT to compile in newer MINGW versions
 	by Baojun Wang @wangbj (#27)
 
-2017-04-26  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-04-26  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.8
 
 	* Setup.hs: Updated for Cabal-2.0
 	by Eric Mertens @glguy (#24)
 
-2017-04-17  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-04-17  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.7
 
 	* Support for MinGW64,
 	by @varosi (#23)
 
-2017-04-05  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-04-05  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.6
 
 	* Setup.hs: builds with ghc 8.2,
 	by Erik de Castro Lopo @erikd (#22)
 
-2017-04-04  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-04-04  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.5
 
 	* cbits/HsOpenSSL.c: fixed HMAC_CTX_free invocation (#21)
 
-2017-03-24  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-03-24  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.4
 
@@ -75,47 +75,47 @@
 
 	* Tests/OpenSSL/EVP/Digest.hs: added tests for hmacBS and hmacLBS.
 
-2017-03-22  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-03-22  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.3
 
 	* OpenSSL/EVP/Digest.hsc (hmacLBS): added HMAC on lazy bytestrings,
 	by SX91 (#18).
 
-2017-03-11  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-03-11  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.2
 
 	* Ported BN to integer-gmp-1.0.x,
 	by SX91 (#17).
 
-2017-02-27  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-02-27  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.1
 
 	* Updated for OpenSSL 1.1.0 (#16)
 
-2017-01-24  Vladimir Shabanov  <vshabanoff@gmail.com>
+2017-01-24  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4
 
 	* Updated for OpenSSL 1.1.0 (#15)
 
-2016-10-17  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-17  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.3.2
 
 	* Test/*, HsOpenSSL.cabal (Build-Depends):
 	Removed HUnit, test-framework and test-framework-hunit dependencies.
 
-2016-10-15  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-15  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.3.1
 
 	* OpenSSL/Session.hsc: Detect failure of SSL_CTX_new,
 	by Eric Mertens @glguy (#13)
 
-2016-10-14  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-14  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.3
 
@@ -125,14 +125,14 @@
 	module. Added encoding/decoding of private keys in ASN.1 DER.
 	by @shak-mar (#12).
 
-2016-10-08  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-08  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.2.4
 
 	* Setup.hs: Fixed handling of 'cabal configure' errors
 	in Homebrew/MacPorts OpenSSL autodetection.
 
-2016-10-06  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-06  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.2.3
 
@@ -148,14 +148,14 @@
 	* OpenSSL/Session.hsc: Exposed OpenSSL.Session internal types,
 	by Eric Mertens @glguy (#10).
 
-2016-10-05  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-05  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.2.2
 
 	* HsOpenSSL.cabal: Added Include-Dirs and Extra-Lib-Dirs for building
 	with Homebrew/MacPorts OpenSSL on Mac OS X 10.11+ (phonohawk#41)
 
-2016-10-04  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-04  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.2.1
 
@@ -166,7 +166,7 @@
 
 	* .travis.yml: Added Travis Job, by Herbert Valerio Riedel @hvr (#8).
 
-2016-10-04  Vladimir Shabanov  <vshabanoff@gmail.com>
+2016-10-04  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.2
 

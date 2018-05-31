@@ -12,7 +12,7 @@ Description:
     <http://hackage.haskell.org/package/tls>, which is a pure Haskell
     implementation of SSL.
     .
-Version:       0.11.4.13
+Version:       0.11.4.14
 License:       PublicDomain
 License-File:  COPYING
 Author:        Adam Langley, Mikhail Vorozhtsov, PHO, Taru Karttunen
@@ -45,9 +45,9 @@ Source-Repository head
 
 Flag fast-bignum
     Description:
-        Enable fast moving of bignums between OpenSSL and GMP (GHC only).
+        Enable fast moving of bignums between OpenSSL and GMP (GHC and OpenSSL version < 1.1.0 only).
     Default:
-        True
+        False
 
 Flag homebrew-openssl
     Description:
@@ -62,15 +62,15 @@ Flag macports-openssl
         False
 
 Custom-setup
-    setup-depends: Cabal >=1.12,
-                   base  >=4.4  && <5
+    setup-depends: Cabal >= 1.12,
+                   base  >= 4.4 && < 5
 
 Library
     Build-Depends:
         base       >= 4.4 && < 5,
-        bytestring >= 0.9   && < 0.11,
-        network    >= 2.1   && < 2.7,
-        time       >= 1.5   && < 1.9
+        bytestring >= 0.9,
+        network    >= 2.1,
+        time       >= 1.5
 
     Build-Tools: hsc2hs >= 0.67
 
@@ -158,7 +158,7 @@ Test-Suite test-dsa
     Build-Depends:
         HsOpenSSL,
         base                 >= 4.4 && < 5,
-        bytestring           >= 0.9 && < 0.11
+        bytestring           >= 0.9
     Default-Language:
         Haskell2010
     GHC-Options:
@@ -183,7 +183,7 @@ Test-Suite test-evp-base64
     Build-Depends:
         HsOpenSSL,
         base                 >= 4.4 && < 5,
-        bytestring           >= 0.9 && < 0.11
+        bytestring           >= 0.9
     Default-Language:
         Haskell2010
     GHC-Options:
@@ -196,7 +196,7 @@ Test-Suite test-evp-digest
     Build-Depends:
         HsOpenSSL,
         base                 >= 4.4 && < 5,
-        bytestring           >= 0.9 && < 0.11
+        bytestring           >= 0.9
     Default-Language:
         Haskell2010
     GHC-Options:

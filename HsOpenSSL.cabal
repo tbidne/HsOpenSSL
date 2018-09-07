@@ -100,7 +100,7 @@ Library
         CC-Options:      -D MINGW32 -DNOCRYPT
         CPP-Options:     -DCALLCONV=stdcall
     else
-        Extra-Libraries: crypto ssl
+        Extra-Libraries: ssl crypto
         C-Sources:       cbits/mutex-pthread.c
         CC-Options:      -D PTHREAD
         CPP-Options:     -DCALLCONV=ccall

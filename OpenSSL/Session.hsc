@@ -101,7 +101,7 @@ import qualified Data.ByteString.Lazy as L
 import qualified Data.ByteString.Lazy.Internal as L
 import System.IO.Unsafe
 import System.Posix.Types (Fd(..))
-import Network.Socket (Socket(..))
+import Network.Socket (Socket, fdSocket)
 
 #if !MIN_VERSION_base(4,8,0)
 import Control.Applicative ((<$>), (<$))
@@ -380,7 +380,12 @@ connection' context fd@(Fd fdInt) sock = do
 --   carries a handle to the Socket so you need not worry about the garbage
 --   collector closing the file descriptor out from under you.
 connection :: SSLContext -> Socket -> IO SSL
-connection context sock@(MkSocket fd _ _ _ _) =
+connection context sock = do
+#if MIN_VERSION_network(3,0,0)
+  fd <- fdSocket sock
+#else
+  let fd = fdSocket sock
+#endif
   connection' context (Fd fd) (Just sock)
 
 -- | Wrap a socket Fd in an SSL connection.

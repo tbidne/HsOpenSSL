@@ -1,3 +1,12 @@
+2019-01-21  Vladimir Shabanov  <dev@vshabanov.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.16
+
+	* Compatibility for network-3.0.0
+	by Roman Borschel romanb (#40)
+
+	* .travis.yml: Fixed build. Updated to last 3 GHC versions.
+
 2018-09-08  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.15

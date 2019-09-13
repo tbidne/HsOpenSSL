@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE EmptyDataDecls           #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 module OpenSSL.ASN1
@@ -28,6 +29,10 @@ import           Foreign.C
 import           OpenSSL.BIO
 import           OpenSSL.BN
 import           OpenSSL.Utils
+
+#if !MIN_VERSION_time(1,5,0)
+import System.Locale
+#endif
 
 {- ASN1_OBJECT --------------------------------------------------------------- -}
 
@@ -125,26 +130,13 @@ peekASN1Time time
              _ASN1_TIME_print bioPtr time
                   >>= failIf_ (/= 1)
          timeStr <- bioRead bio
-         case parseTimeM True locale "%b %e %H:%M:%S %Y %Z" timeStr of
+#if MIN_VERSION_time(1,5,0)	       
+         case parseTimeM True defaultTimeLocale "%b %e %H:%M:%S %Y %Z" timeStr of
+#else
+         case parseTime defaultTimeLocale "%b %e %H:%M:%S %Y %Z" timeStr of
+#endif
            Just utc -> return utc
            Nothing  -> fail ("peekASN1Time: failed to parse time string: " ++ timeStr)
-    where
-      locale :: TimeLocale
-      locale = TimeLocale {
-                 wDays       = undefined
-               , months      = [ (undefined, x)
-                                     | x <- [ "Jan", "Feb", "Mar", "Apr", "May", "Jun"
-                                            , "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                                            ]
-                               ]
-               , amPm        = undefined
-               , dateTimeFmt = undefined
-               , dateFmt     = undefined
-               , timeFmt     = undefined
-               , time12Fmt   = undefined
-               , knownTimeZones = []
-               }
-
 
 allocaASN1Time :: (Ptr ASN1_TIME -> IO a) -> IO a
 allocaASN1Time

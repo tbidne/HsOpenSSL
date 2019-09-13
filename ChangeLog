@@ -1,3 +1,10 @@
+2019-09-13  Vladimir Shabanov  <dev@vshabanov.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.17
+
+	* Allow old time, allows building with bundled time back to GHC-7.4
+	by Oleg Grenrus @phadej (#46)
+
 2019-01-21  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version):

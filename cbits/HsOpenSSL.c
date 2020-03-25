@@ -119,7 +119,7 @@ const ASN1_TIME* HsOpenSSL_X509_CRL_get_lastUpdate(const X509_CRL* crl) {
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
     return X509_CRL_get0_lastUpdate(crl);
 #else
-    return X509_CRL_get_lastUpdate(crl);
+    return X509_CRL_get_lastUpdate((X509_CRL*) crl);
 #endif
 }
 
@@ -127,7 +127,7 @@ const ASN1_TIME* HsOpenSSL_X509_CRL_get_nextUpdate(const X509_CRL* crl) {
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
     return X509_CRL_get0_nextUpdate(crl);
 #else
-    return X509_CRL_get_nextUpdate(crl);
+    return X509_CRL_get_nextUpdate((X509_CRL*) crl);
 #endif
 }
 

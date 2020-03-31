@@ -119,7 +119,7 @@ const ASN1_TIME* HsOpenSSL_X509_CRL_get_lastUpdate(const X509_CRL* crl) {
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
     return X509_CRL_get0_lastUpdate(crl);
 #else
-    return X509_CRL_get_lastUpdate(crl);
+    return X509_CRL_get_lastUpdate((X509_CRL*) crl);
 #endif
 }
 
@@ -127,7 +127,7 @@ const ASN1_TIME* HsOpenSSL_X509_CRL_get_nextUpdate(const X509_CRL* crl) {
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
     return X509_CRL_get0_nextUpdate(crl);
 #else
-    return X509_CRL_get_nextUpdate(crl);
+    return X509_CRL_get_nextUpdate((X509_CRL*) crl);
 #endif
 }
 
@@ -204,14 +204,18 @@ int HsOpenSSL_DH_length(DH *dh) {
 
 /* ASN1 ***********************************************************************/
 
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
 #define M_ASN1_INTEGER_new()    (ASN1_INTEGER *)\
     ASN1_STRING_type_new(V_ASN1_INTEGER)
-#define M_ASN1_INTEGER_free(a)  ASN1_STRING_free((ASN1_STRING *)a)
 #define M_ASN1_TIME_new()       (ASN1_TIME *)\
     ASN1_STRING_type_new(V_ASN1_UTCTIME)
 #define M_ASN1_TIME_free(a)     ASN1_STRING_free((ASN1_STRING *)a)
 #endif
+
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#define M_ASN1_INTEGER_free(a)  ASN1_STRING_free((ASN1_STRING *)a)
+#endif
+
 
 ASN1_INTEGER* HsOpenSSL_M_ASN1_INTEGER_new() {
     return M_ASN1_INTEGER_new();

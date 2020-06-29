@@ -1,7 +1,6 @@
 Name:         HsOpenSSL
 Synopsis:     Partial OpenSSL binding for Haskell
 Description:
-    .
     HsOpenSSL is an OpenSSL binding for Haskell. It can generate RSA
     and DSA keys, read and write PEM files, generate message digests,
     sign and verify messages, encrypt and decrypt messages. It has
@@ -11,7 +10,6 @@ Description:
     systems and stable. You may also be interested in the @tls@ package,
     <http://hackage.haskell.org/package/tls>, which is a pure Haskell
     implementation of SSL.
-    .
 Version:       0.11.4.18
 License:       PublicDomain
 License-File:  COPYING

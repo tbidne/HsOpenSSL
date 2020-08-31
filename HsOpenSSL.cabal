@@ -59,6 +59,14 @@ Flag macports-openssl
     Default:
         False
 
+Flag use-pkg-config
+    Description: 
+        Use pkg-config to find OpenSSL (macOS and linux only).
+    Default: 
+        False
+    Manual: 
+        True
+
 flag old-locale
   description: If true, use old-locale, otherwise use time 1.5 or newer.
   manual:      False
@@ -111,7 +119,10 @@ Library
         CC-Options:      -D MINGW32 -DNOCRYPT
         CPP-Options:     -DCALLCONV=stdcall
     else
-        Extra-Libraries: ssl crypto
+        if flag(use-pkg-config)
+            pkgconfig-depends: libssl, libcrypto
+        else
+            Extra-Libraries: ssl crypto
         C-Sources:       cbits/mutex-pthread.c
         CC-Options:      -D PTHREAD
         CPP-Options:     -DCALLCONV=ccall

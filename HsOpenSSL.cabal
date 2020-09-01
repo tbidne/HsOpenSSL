@@ -10,7 +10,7 @@ Description:
     systems and stable. You may also be interested in the @tls@ package,
     <http://hackage.haskell.org/package/tls>, which is a pure Haskell
     implementation of SSL.
-Version:       0.11.4.18
+Version:       0.11.4.19
 License:       PublicDomain
 License-File:  COPYING
 Author:        Adam Langley, Mikhail Vorozhtsov, PHO, Taru Karttunen
@@ -60,11 +60,11 @@ Flag macports-openssl
         False
 
 Flag use-pkg-config
-    Description: 
+    Description:
         Use pkg-config to find OpenSSL (macOS and linux only).
-    Default: 
+    Default:
         False
-    Manual: 
+    Manual:
         True
 
 flag old-locale

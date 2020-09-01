@@ -1,3 +1,10 @@
+2020-09-01  Vladimir Shabanov  <dev@vshabanov.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.19
+
+	* HsOpenSSL.cabal (Version): Discover OpenSSL via pkg-config
+	by Alexander Biehl @alexbiehl (#51)
+
 2020-03-31  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.18

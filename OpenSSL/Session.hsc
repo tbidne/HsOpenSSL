@@ -38,6 +38,7 @@ module OpenSSL.Session
   , addOption
   , removeOption
   , setTlsextHostName
+  , enableHostnameValidation
   , accept
   , tryAccept
   , connect
@@ -77,6 +78,7 @@ module OpenSSL.Session
   ) where
 
 #include "openssl/ssl.h"
+#include "openssl/x509v3.h"
 
 import Prelude hiding (
 #if !MIN_VERSION_base(4,6,0)
@@ -423,6 +425,28 @@ setTlsextHostName ssl h =
     withSSL ssl $ \sslPtr ->
     withCString h $ \ hPtr ->
         _SSL_set_tlsext_host_name sslPtr hPtr >> return ()
+
+-- Hostname validation, inspired by https://wiki.openssl.org/index.php/Hostname_validation
+
+data X509_VERIFY_PARAM_
+
+foreign import ccall unsafe "SSL_get0_param"
+  _ssl_get0_param :: Ptr SSL_ -> IO (Ptr X509_VERIFY_PARAM_)
+
+foreign import ccall unsafe "X509_VERIFY_PARAM_set_hostflags"
+  _x509_verify_param_set_hostflags :: Ptr X509_VERIFY_PARAM_ -> CUInt -> IO ()
+
+foreign import ccall unsafe "X509_VERIFY_PARAM_set1_host"
+  _x509_verify_param_set1_host :: Ptr X509_VERIFY_PARAM_ -> CString -> CSize -> IO CInt
+
+-- | Enable hostname validation. Also see 'setTlsextHostName'.
+enableHostnameValidation :: SSL -> String -> IO ()
+enableHostnameValidation ssl host =
+  withSSL ssl $ \ssl ->
+  withCStringLen host $ \(host, hostLen) -> do
+    param <- _ssl_get0_param ssl
+    _x509_verify_param_set_hostflags param (#const X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS)
+    _x509_verify_param_set1_host param host (fromIntegral hostLen) >>= failIf_ (/= 1)
 
 foreign import ccall "SSL_accept" _ssl_accept :: Ptr SSL_ -> IO CInt
 foreign import ccall "SSL_connect" _ssl_connect :: Ptr SSL_ -> IO CInt

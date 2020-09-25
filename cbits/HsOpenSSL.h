@@ -105,4 +105,6 @@ long HsOpenSSL_SSL_set_options(SSL* ssl, long options);
 long HsOpenSSL_SSL_clear_options(SSL* ssl, long options);
 long HsOpenSSL_SSL_set_tlsext_host_name(SSL* ssl, char* host_name);
 
+int HsOpenSSL_enable_hostname_validation(SSL* ssl, char* host_name, size_t host_len);
+
 #endif

@@ -78,7 +78,6 @@ module OpenSSL.Session
   ) where
 
 #include "openssl/ssl.h"
-#include "openssl/x509v3.h"
 
 import Prelude hiding (
 #if !MIN_VERSION_base(4,6,0)

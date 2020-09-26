@@ -431,6 +431,9 @@ foreign import ccall unsafe "HsOpenSSL_enable_hostname_validation"
   _enable_hostname_validation :: Ptr SSL_ -> CString -> CSize -> IO CInt
 
 -- | Enable hostname validation. Also see 'setTlsextHostName'.
+--
+-- This uses the built-in mechanism introduced in 1.0.2/1.1.0, and will
+-- fail otherwise.
 enableHostnameValidation :: SSL -> String -> IO ()
 enableHostnameValidation ssl host =
   withSSL ssl $ \ssl ->

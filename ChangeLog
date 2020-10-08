@@ -1,8 +1,17 @@
+2020-10-08  Vladimir Shabanov  <dev@vshabanov.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.20
+
+	* Hostname validation
+	by @amesgen (#52)
+
+	* Do not compile OpenSSL modules twice for tests
+
 2020-09-01  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.19
 
-	* HsOpenSSL.cabal (Version): Discover OpenSSL via pkg-config
+	* HsOpenSSL.cabal: Discover OpenSSL via pkg-config
 	by Alexander Biehl @alexbiehl (#51)
 
 2020-03-31  Vladimir Shabanov  <dev@vshabanov.com>
@@ -21,7 +30,7 @@
 
 2019-01-21  Vladimir Shabanov  <dev@vshabanov.com>
 
-	* HsOpenSSL.cabal (Version):
+	* HsOpenSSL.cabal:
 	Added upper version bounds to all dependencies (#41)
 
 2019-01-21  Vladimir Shabanov  <dev@vshabanov.com>
@@ -29,7 +38,7 @@
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.16
 
 	* Compatibility for network-3.0.0
-	by Roman Borschel romanb (#40)
+	by Roman Borschel @romanb (#40)
 
 	* .travis.yml: Fixed build. Updated to last 3 GHC versions.
 

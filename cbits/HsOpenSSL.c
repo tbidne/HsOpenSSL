@@ -390,3 +390,13 @@ long HsOpenSSL_SSL_clear_options(SSL* ssl, long options) {
     return SSL_set_options(ssl, tmp & ~options);
 #endif
 }
+
+int HsOpenSSL_enable_hostname_validation(SSL* ssl, char* host_name, size_t host_len) {
+#if defined(X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS)
+    X509_VERIFY_PARAM* param = SSL_get0_param(ssl);
+    X509_VERIFY_PARAM_set_hostflags(param, X509_CHECK_FLAG_NO_PARTIAL_WILDCARDS);
+    return X509_VERIFY_PARAM_set1_host(param, host_name, host_len);
+#else
+    return 0;
+#endif
+}

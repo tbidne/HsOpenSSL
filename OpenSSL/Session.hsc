@@ -38,6 +38,7 @@ module OpenSSL.Session
   , addOption
   , removeOption
   , setTlsextHostName
+  , enableHostnameValidation
   , accept
   , tryAccept
   , connect
@@ -423,6 +424,21 @@ setTlsextHostName ssl h =
     withSSL ssl $ \sslPtr ->
     withCString h $ \ hPtr ->
         _SSL_set_tlsext_host_name sslPtr hPtr >> return ()
+
+-- Hostname validation, inspired by https://wiki.openssl.org/index.php/Hostname_validation
+
+foreign import ccall unsafe "HsOpenSSL_enable_hostname_validation"
+  _enable_hostname_validation :: Ptr SSL_ -> CString -> CSize -> IO CInt
+
+-- | Enable hostname validation. Also see 'setTlsextHostName'.
+--
+-- This uses the built-in mechanism introduced in 1.0.2/1.1.0, and will
+-- fail otherwise.
+enableHostnameValidation :: SSL -> String -> IO ()
+enableHostnameValidation ssl host =
+  withSSL ssl $ \ssl ->
+  withCStringLen host $ \(host, hostLen) ->
+    _enable_hostname_validation ssl host (fromIntegral hostLen) >>= failIf_ (/= 1)
 
 foreign import ccall "SSL_accept" _ssl_accept :: Ptr SSL_ -> IO CInt
 foreign import ccall "SSL_connect" _ssl_connect :: Ptr SSL_ -> IO CInt

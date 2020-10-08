@@ -2,7 +2,7 @@ module Main (main) where
 
 import OpenSSL.RSA
 import OpenSSL.DER
-import Test.OpenSSL.TestUtils
+import TestUtils
 
 main :: IO ()
 main = do

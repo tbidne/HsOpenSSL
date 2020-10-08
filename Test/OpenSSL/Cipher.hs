@@ -8,7 +8,7 @@ module Main (main) where
 
 import qualified Data.ByteString as BS
 import OpenSSL.Cipher
-import Test.OpenSSL.TestUtils
+import TestUtils
 
 -- | Convert a hex string to a ByteString (e.g. "0011" == BS.pack [0, 0x11])
 hexToBS :: String -> BS.ByteString

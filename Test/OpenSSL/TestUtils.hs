@@ -1,4 +1,4 @@
-module Test.OpenSSL.TestUtils where
+module TestUtils where
 
 import qualified Control.Exception as E
 import Control.Monad

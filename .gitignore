@@ -3,6 +3,7 @@
 
 Setup
 dist
+dist-newstyle
 examples/GenRSAKey
 examples/HelloWorld
 examples/PKCS7
@@ -10,3 +11,4 @@ examples/Server
 
 .cabal-sandbox
 cabal.sandbox.config
+cabal.project.local

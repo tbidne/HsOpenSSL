@@ -2,7 +2,7 @@ module Main (main) where
 
 import qualified Data.ByteString as BS
 import OpenSSL.DSA
-import Test.OpenSSL.TestUtils
+import TestUtils
 
 -- | This function just runs the example DSA generation, as given in FIP 186-2,
 --   app 5.

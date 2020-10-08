@@ -6,7 +6,7 @@ import Data.Char
 import OpenSSL
 import Text.Printf
 import OpenSSL.EVP.Digest
-import Test.OpenSSL.TestUtils
+import TestUtils
 
 main :: IO ()
 main = withOpenSSL $ do

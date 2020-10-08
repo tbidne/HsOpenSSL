@@ -9,7 +9,7 @@ import Data.String
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL
 import OpenSSL.EVP.Base64
-import Test.OpenSSL.TestUtils
+import TestUtils
 
 -- NOTE: bytestring-0.9.0.4 has these instances too, while
 -- bytestring-0.9.0.3 does not. If our bytestring is 0.9.0.4 we'll

@@ -1,3 +1,12 @@
+2020-11-02  Vladimir Shabanov  <dev@vshabanov.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.5
+	(actually it is previous version that should be 0.11.5
+	since it added new API but it was already released
+	so we bumping version here).
+
+	* Handling SSL_ERROR_SYSCALL with errno=0 which means unexpected EOF.
+
 2020-10-08  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.4.20

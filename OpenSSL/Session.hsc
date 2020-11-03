@@ -452,15 +452,51 @@ foreign import ccall "SSL_accept" _ssl_accept :: Ptr SSL_ -> IO CInt
 foreign import ccall "SSL_connect" _ssl_connect :: Ptr SSL_ -> IO CInt
 foreign import ccall unsafe "SSL_get_error" _ssl_get_error :: Ptr SSL_ -> CInt -> IO CInt
 
-throwSSLException :: String -> CInt -> IO a
-throwSSLException loc ret
+throwSSLException :: String -> CInt -> CInt -> IO a
+throwSSLException loc sslErr ret
     = do e <- getError
          if e == 0 then
              case ret of
-               0 -> throwIO ConnectionAbruptlyTerminated
-               _ -> throwErrno loc
+               0 ->
+                 throwIO ConnectionAbruptlyTerminated
+                 -- empty error queue and ret==0 meant EOF in older versions
+                 -- of OpenSSL
+                 -- https://github.com/openssl/openssl/commit/beacb0f0c1ae7b0542fe053b95307f515b578eb7
+               _ -> do
+                 errno <- getErrno
+                 if errno == eOK then
+                   if sslErr == (#const SSL_ERROR_SYSCALL) then
+                     -- newer OpenSSL versions have bug:
+                     -- SSL_ERROR_SYSCALL with errno=0 means unexpected EOF
+                     -- from the peer
+                     throwIO ConnectionAbruptlyTerminated
+                   else
+                     throwIO $ ProtocolError $ loc <> ": "
+                       <> sslErrorString sslErr
+                 else
+                   throwErrno loc
            else
              errorString e >>= throwIO . ProtocolError
+
+sslErrorString :: CInt -> String
+sslErrorString e = case e of
+  (#const SSL_ERROR_NONE) -> "SSL_ERROR_NONE"
+  (#const SSL_ERROR_ZERO_RETURN) -> "SSL_ERROR_ZERO_RETURN"
+  (#const SSL_ERROR_WANT_READ) -> "SSL_ERROR_WANT_READ"
+  (#const SSL_ERROR_WANT_WRITE) -> "SSL_ERROR_WANT_WRITE"
+  (#const SSL_ERROR_WANT_CONNECT) -> "SSL_ERROR_WANT_CONNECT"
+  (#const SSL_ERROR_WANT_ACCEPT) -> "SSL_ERROR_WANT_ACCEPT"
+  (#const SSL_ERROR_WANT_X509_LOOKUP) -> "SSL_ERROR_WANT_X509_LOOKUP"
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+  (#const SSL_ERROR_WANT_ASYNC) -> "SSL_ERROR_WANT_ASYNC"
+  (#const SSL_ERROR_WANT_ASYNC_JOB) -> "SSL_ERROR_WANT_ASYNC_JOB"
+#endif
+#if OPENSSL_VERSION_NUMBER >= 0x10101000L
+  (#const SSL_ERROR_WANT_CLIENT_HELLO_CB) -> "SSL_ERROR_WANT_CLIENT_HELLO_CB"
+#endif
+  (#const SSL_ERROR_SYSCALL) -> "SSL_ERROR_SYSCALL"
+  (#const SSL_ERROR_SSL) -> "SSL_ERROR_SSL"
+  _ -> "Unknown SSL error " <> show e
 
 -- | This is the type of an SSL IO operation. Errors are handled by
 -- exceptions while everything else is one of these. Note that reading
@@ -497,7 +533,7 @@ sslTryHandshake loc action ssl
                 case err of
                   (#const SSL_ERROR_WANT_READ ) -> return WantRead
                   (#const SSL_ERROR_WANT_WRITE) -> return WantWrite
-                  _ -> throwSSLException loc n
+                  _ -> throwSSLException loc err n
 
 -- | Perform an SSL server handshake
 accept :: SSL -> IO ()
@@ -547,7 +583,7 @@ sslIOInner loc f ptr nbytes ssl
                   (#const SSL_ERROR_ZERO_RETURN) -> return $ SSLDone $ 0
                   (#const SSL_ERROR_WANT_READ  ) -> return WantRead
                   (#const SSL_ERROR_WANT_WRITE ) -> return WantWrite
-                  _ -> throwSSLException loc n
+                  _ -> throwSSLException loc err n
 
 -- | Try to read the given number of bytes from an SSL connection. On EOF an
 --   empty ByteString is returned. If the connection dies without a graceful
@@ -689,10 +725,10 @@ tryShutdown ssl ty = runInBoundThread $ withSSL ssl loop
                            (#const SSL_ERROR_SYSCALL)
                                -> do sd <- _ssl_get_shutdown sslPtr
                                      if sd .&. (#const SSL_RECEIVED_SHUTDOWN) == 0 then
-                                         throwSSLException "SSL_shutdown" n
+                                         throwSSLException "SSL_shutdown" err n
                                        else
                                          return $ SSLDone ()
-                           _   -> throwSSLException "SSL_shutdown" n
+                           _   -> throwSSLException "SSL_shutdown" err n
 
 foreign import ccall "SSL_get_peer_certificate" _ssl_get_peer_cert :: Ptr SSL_ -> IO (Ptr X509_)
 

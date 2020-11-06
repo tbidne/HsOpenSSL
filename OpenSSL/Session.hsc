@@ -471,8 +471,8 @@ throwSSLException loc sslErr ret
                      -- from the peer
                      throwIO ConnectionAbruptlyTerminated
                    else
-                     throwIO $ ProtocolError $ loc <> ": "
-                       <> sslErrorString sslErr
+                     throwIO $ ProtocolError $ loc ++ ": "
+                       ++ sslErrorString sslErr
                  else
                    throwErrno loc
            else
@@ -496,7 +496,7 @@ sslErrorString e = case e of
 #endif
   (#const SSL_ERROR_SYSCALL) -> "SSL_ERROR_SYSCALL"
   (#const SSL_ERROR_SSL) -> "SSL_ERROR_SSL"
-  _ -> "Unknown SSL error " <> show e
+  _ -> "Unknown SSL error: " ++ show e
 
 -- | This is the type of an SSL IO operation. Errors are handled by
 -- exceptions while everything else is one of these. Note that reading

@@ -29,6 +29,7 @@ module OpenSSL.Session
   , contextSetCAFile
   , contextSetCADirectory
   , contextGetCAStore
+  , contextSetSessionIdContext
 
     -- * SSL connections
   , SSL
@@ -338,6 +339,19 @@ contextGetCAStore context
     = withContext context $ \ ctx ->
       _ssl_get_cert_store ctx
            >>= wrapX509Store (touchContext context)
+
+foreign import ccall unsafe "SSL_CTX_set_session_id_context"
+  _ssl_set_session_id_context :: Ptr SSLContext_ -> Ptr CChar -> CSize -> IO CInt
+
+-- | Set context within which session can be reused (server side only).
+--
+-- If client certificates are used and the session id context is not set,
+-- attempts by the clients to reuse a session will make the handshake fail.
+contextSetSessionIdContext :: SSLContext -> B.ByteString -> IO ()
+contextSetSessionIdContext context idCtx =
+  withContext context $ \ctx ->
+    B.unsafeUseAsCStringLen idCtx $ \(cIdCtx, len) ->
+        _ssl_set_session_id_context ctx cIdCtx (fromIntegral len) >>= failIf_ (/= 1)
 
 
 data SSL_

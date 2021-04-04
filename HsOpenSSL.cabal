@@ -108,21 +108,16 @@ Library
         Include-Dirs: /opt/local/include
         Extra-Lib-Dirs: /opt/local/lib
 
+    if flag(use-pkg-config)
+        pkgconfig-depends: libssl, libcrypto
+    else
+        Extra-Libraries: ssl crypto
+
     if os(mingw32)
-        if arch(x86_64)
-            Extra-Libraries: eay32 ssl
-
-        if arch(i386)
-            Extra-Libraries: eay32 ssl32
-
         C-Sources:       cbits/mutex-win.c
         CC-Options:      -D MINGW32 -DNOCRYPT
         CPP-Options:     -DCALLCONV=stdcall
     else
-        if flag(use-pkg-config)
-            pkgconfig-depends: libssl, libcrypto
-        else
-            Extra-Libraries: ssl crypto
         C-Sources:       cbits/mutex-pthread.c
         CC-Options:      -D PTHREAD
         CPP-Options:     -DCALLCONV=ccall

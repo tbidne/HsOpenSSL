@@ -1,3 +1,6 @@
+#include "HsOpenSSL.h"
+#include "openssl/aes.h"
+
 {-# LANGUAGE EmptyDataDecls           #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
 -- | This module interfaces to some of the OpenSSL ciphers without using
@@ -21,8 +24,7 @@ module OpenSSL.Cipher
 #endif
     )
     where
-#include "HsOpenSSL.h"
-#include "openssl/aes.h"
+
 import           Control.Monad (when, unless)
 import           Data.IORef
 import           Foreign

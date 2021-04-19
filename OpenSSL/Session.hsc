@@ -79,7 +79,7 @@ module OpenSSL.Session
 
   ) where
 
-#include "openssl/ssl.h"
+#include "HsOpenSSL.h"
 
 import Prelude hiding (
 #if !MIN_VERSION_base(4,6,0)
@@ -523,11 +523,13 @@ sslErrorString e = case e of
   (#const SSL_ERROR_WANT_CONNECT) -> "SSL_ERROR_WANT_CONNECT"
   (#const SSL_ERROR_WANT_ACCEPT) -> "SSL_ERROR_WANT_ACCEPT"
   (#const SSL_ERROR_WANT_X509_LOOKUP) -> "SSL_ERROR_WANT_X509_LOOKUP"
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#if defined(SSL_ERROR_WANT_ASYNC)
   (#const SSL_ERROR_WANT_ASYNC) -> "SSL_ERROR_WANT_ASYNC"
+#endif
+#if defined(SSL_ERROR_WANT_ASYNC_JOB)
   (#const SSL_ERROR_WANT_ASYNC_JOB) -> "SSL_ERROR_WANT_ASYNC_JOB"
 #endif
-#if OPENSSL_VERSION_NUMBER >= 0x10101000L
+#if defined(SSL_ERROR_WANT_CLIENT_HELLO_CB)
   (#const SSL_ERROR_WANT_CLIENT_HELLO_CB) -> "SSL_ERROR_WANT_CLIENT_HELLO_CB"
 #endif
   (#const SSL_ERROR_SYSCALL) -> "SSL_ERROR_SYSCALL"

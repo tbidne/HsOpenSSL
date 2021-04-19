@@ -26,6 +26,7 @@ module OpenSSL.Session
   , contextCheckPrivateKey
   , VerificationMode(..)
   , contextSetVerificationMode
+  , contextSetDefaultVerifyPaths
   , contextSetCAFile
   , contextSetCADirectory
   , contextGetCAStore
@@ -307,6 +308,27 @@ contextSetVerificationMode context (VerifyPeer reqp oncep cbp) = do
     forM_ oldCb freeHaskellFunPtr
     _ssl_set_verify_mode ctx mode $ fromMaybe nullFunPtr newCb
     return ()
+
+foreign import ccall unsafe "SSL_CTX_set_default_verify_paths"
+  _ssl_set_default_verify_paths :: Ptr SSLContext_ -> IO CInt
+
+-- | Specifies that the default locations from which CA certificates are loaded
+-- should be used. There is one default directory and one default file.
+--
+-- The default CA certificates directory is called "certs" in the default OpenSSL
+-- directory. Alternatively the SSL_CERT_DIR environment variable can be defined
+-- to override this location.
+--
+-- The default CA certificates file is called "cert.pem" in the default OpenSSL
+-- directory. Alternatively the SSL_CERT_FILE environment
+-- variable can be defined to override this location.
+--
+-- See <https://www.openssl.org/docs/manmaster/man3/SSL_CTX_set_default_verify_paths.html> for
+-- more information.
+contextSetDefaultVerifyPaths :: SSLContext -> IO ()
+contextSetDefaultVerifyPaths context =
+  withContext context $ \ctx ->
+    _ssl_set_default_verify_paths ctx >>= failIf_ (/= 1)
 
 foreign import ccall unsafe "SSL_CTX_load_verify_locations"
   _ssl_load_verify_locations :: Ptr SSLContext_ -> Ptr CChar -> Ptr CChar -> IO CInt

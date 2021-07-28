@@ -363,7 +363,7 @@ contextGetCAStore context
            >>= wrapX509Store (touchContext context)
 
 foreign import ccall unsafe "SSL_CTX_set_session_id_context"
-  _ssl_set_session_id_context :: Ptr SSLContext_ -> Ptr CChar -> CSize -> IO CInt
+  _ssl_set_session_id_context :: Ptr SSLContext_ -> Ptr CChar -> CUInt -> IO CInt
 
 -- | Set context within which session can be reused (server side only).
 --

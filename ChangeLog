@@ -1,3 +1,10 @@
+2021-07-28  Vladimir Shabanov  <dev@vshabanov.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.7.1
+
+	* Fix SSL_CTX_set_session_id_context #61
+	by @flobrosch (#61)
+
 2021-04-05  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.6.1

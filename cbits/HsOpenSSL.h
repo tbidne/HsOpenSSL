@@ -38,6 +38,13 @@
 #define OPENSSL_VERSION_NUMBER 0x1000107fL
 #endif
 
+/* OpenSSL 3.0 ****************************************************************/
+
+#ifndef OPENSSL_VERSION_PREREQ
+#define OPENSSL_VERSION_PREREQ(maj,min) 0
+#endif
+
+
 /* OpenSSL ********************************************************************/
 void HsOpenSSL_init();
 void HsOpenSSL_OPENSSL_free(void* ptr);

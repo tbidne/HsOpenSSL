@@ -767,8 +767,11 @@ tryShutdown ssl ty = runInBoundThread $ withSSL ssl loop
                                        else
                                          return $ SSLDone ()
                            _   -> throwSSLException "SSL_shutdown" err n
-
+#if OPENSSL_VERSION_PREREQ(3,0)
+foreign import ccall "SSL_get1_peer_certificate" _ssl_get_peer_cert :: Ptr SSL_ -> IO (Ptr X509_)
+#else
 foreign import ccall "SSL_get_peer_certificate" _ssl_get_peer_cert :: Ptr SSL_ -> IO (Ptr X509_)
+#endif
 
 -- | After a successful connection, get the certificate of the other party. If
 --   this is a server connection, you probably won't get a certificate unless

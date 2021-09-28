@@ -50,13 +50,13 @@ class PublicKey a => KeyPair a where
     toKeyPair (SomeKeyPair pk) = cast pk
 
 
-getType :: Ptr EVP_PKEY -> IO CInt
 
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-foreign import ccall unsafe "EVP_PKEY_base_id"
-        _base_id :: Ptr EVP_PKEY -> IO CInt
-getType = _base_id
+#if OPENSSL_VERSION_PREREQ(3,0)
+foreign import ccall unsafe "EVP_PKEY_get_base_id" getType :: Ptr EVP_PKEY -> IO CInt
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+foreign import ccall unsafe "EVP_PKEY_base_id" getType :: Ptr EVP_PKEY -> IO CInt
 #else
+getType :: Ptr EVP_PKEY -> IO CInt
 getType = (#peek EVP_PKEY, type)
 #endif
 

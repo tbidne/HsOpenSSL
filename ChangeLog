@@ -1,3 +1,9 @@
+2021-09-29  Vladimir Shabanov  <dev@vshabanov.com>
+
+	* HsOpenSSL.cabal (Version): Bump version to 0.11.7.2
+
+	* Fixed OpenSSL 3.0 linking errors (#62)
+
 2021-07-28  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.7.1

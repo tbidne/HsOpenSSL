@@ -255,7 +255,7 @@ foreign import ccall unsafe "SSL_CTX_set_cipher_list"
 
 -- | Set the ciphers to be used by the given context. The string argument is a
 --   list of ciphers, comma separated, as given at
---   http://www.openssl.org/docs/apps/ciphers.html
+--   <https://www.openssl.org/docs/manmaster/man1/openssl-ciphers.html>.
 --
 --   Unrecognised ciphers are ignored. If no ciphers from the list are
 --   recognised, an exception is raised.
@@ -265,6 +265,7 @@ contextSetCiphers context list =
     withCString list $ \cpath ->
       _ssl_ctx_set_cipher_list ctx cpath >>= failIf_ (/= 1)
 
+-- | Set the ciphers to "DEFAULT".
 contextSetDefaultCiphers :: SSLContext -> IO ()
 contextSetDefaultCiphers = flip contextSetCiphers "DEFAULT"
 

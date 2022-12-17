@@ -1,6 +1,9 @@
-2022-xx-xx  Vladimir Shabanov  <dev@vshabanov.com>
+2022-12-17  Vladimir Shabanov  <dev@vshabanov.com>
 
 	* HsOpenSSL.cabal (Version): Bump version to 0.11.7.3
+
+	* Use capi instead of ccall for better compatibility
+	with OpenSSL 3.0 (#73, #63)
 
 	* Update documentation for ssl cipher selection
 	by Adam Sandberg Eriksson @adamse (#66)
@@ -17,7 +20,6 @@
 
 	* Fix SSL_CTX_set_session_id_context #61
 	by @flobrosch (#61)
-
 
 2021-04-19  Vladimir Shabanov  <dev@vshabanov.com>
 

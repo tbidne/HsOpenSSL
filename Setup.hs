@@ -88,10 +88,19 @@ conf descr cfg = do
                         fail $ multipleFound fs
 
 notFound = unlines
-    [ "Can't find OpenSSL library,"
-    , "install it via 'brew install openssl' or 'port install openssl'"
-    , "or use --extra-include-dirs= and --extra-lib-dirs="
-    , "to specify location of installed OpenSSL library."
+    [ "Can't find OpenSSL library."
+    , "Install it via 'brew install openssl' or 'port install openssl'."
+    , ""
+    , "If you already have OpenSSL installed, specify the location"
+    , "of the installed library in cabal.project:"
+    , ""
+    , "package HsOpenSSL"
+    , "  extra-include-dirs: ..."
+    , "  extra-lib-dirs: ..."
+    , ""
+    , "or use"
+    , ""
+    , "cabal configure --extra-include-dirs=... --extra-lib-dirs=..."
     ]
 
 multipleFound fs = unlines

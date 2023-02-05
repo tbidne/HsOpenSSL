@@ -68,7 +68,7 @@ Flag use-pkg-config
         True
 
 Custom-setup
-    setup-depends: Cabal >= 1.12,
+    setup-depends: Cabal >= 1.12 && < 4,
                    base  >= 4.8 && < 5
 
 Library

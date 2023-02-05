@@ -32,6 +32,7 @@ module OpenSSL.Session
   , contextSetCADirectory
   , contextGetCAStore
   , contextSetSessionIdContext
+  , contextSetALPNProtos
 
     -- * SSL connections
   , SSL
@@ -377,6 +378,19 @@ contextSetSessionIdContext context idCtx =
     B.unsafeUseAsCStringLen idCtx $ \(cIdCtx, len) ->
         _ssl_set_session_id_context ctx cIdCtx (fromIntegral len) >>= failIf_ (/= 1)
 
+foreign import capi unsafe "openssl/ssl.h SSL_CTX_set_alpn_protos"
+  _ssl_set_alpn_protos :: Ptr SSLContext_ -> Ptr CChar -> CUInt -> IO CInt
+
+contextSetALPNProtos :: SSLContext -> [B.ByteString] -> IO ()
+contextSetALPNProtos context protos =
+  withContext context $ \ctx -> do
+    -- Protos need to be wire-format as documented here:
+    -- https://www.openssl.org/docs/man1.0.2/man3/SSL_CTX_set_alpn_protos.html#NOTES
+    let formattedProtos = B.concat $ map (\p -> B.cons (fromIntegral (B.length p)) p) protos
+    B.unsafeUseAsCStringLen formattedProtos $ \(cFormattedProtos, len) ->
+      -- This function breaks the convention of returning '1' for success:
+      -- https://www.openssl.org/docs/man1.0.2/man3/SSL_CTX_set_alpn_protos.html#RETURN-VALUES
+      _ssl_set_alpn_protos ctx cFormattedProtos (fromIntegral len) >>= failIf_ (/= 0)
 
 data {-# CTYPE "openssl/ssl.h" "SSL" #-} SSL_
 -- | This is the type of an SSL connection

@@ -33,6 +33,7 @@ module OpenSSL.Session
   , contextGetCAStore
   , contextSetSessionIdContext
   , contextSetALPNProtos
+  , withContextSetKeylogCallback
 
     -- * SSL connections
   , SSL
@@ -391,6 +392,25 @@ contextSetALPNProtos context protos =
       -- This function breaks the convention of returning '1' for success:
       -- https://www.openssl.org/docs/man1.0.2/man3/SSL_CTX_set_alpn_protos.html#RETURN-VALUES
       _ssl_set_alpn_protos ctx cFormattedProtos (fromIntegral len) >>= failIf_ (/= 0)
+
+type KeylogCb = Ptr SSL_ -> CString -> IO ()
+
+foreign import ccall "wrapper" mkKeylogCb :: KeylogCb -> IO (FunPtr KeylogCb)
+
+foreign import capi "openssl/ssl.h SSL_CTX_set_keylog_callback" _ssl_ctx_set_keylog_callback :: Ptr SSLContext_ -> FunPtr KeylogCb -> IO ()
+
+-- | The key logging callback is called with a String "line". The line is a
+-- string containing the key material in the format used by NSS for its
+-- SSLKEYLOGFILE debugging output. To recreate that file, the key logging
+-- callback should log line, followed by a newline.
+withContextSetKeylogCallback :: SSLContext -> (String -> IO ()) -> IO () -> IO ()
+withContextSetKeylogCallback context cb action = do
+  -- There doesn't seem to be a way to go from 'Ptr SSL_' to 'SSL', so let's
+  -- just ignore it in the haskell callback.
+  bracket
+    (mkKeylogCb $ \_ssl line -> (cb =<< peekCString line))
+    (\cbPtr -> withContext context (flip _ssl_ctx_set_keylog_callback nullFunPtr) >> freeHaskellFunPtr cbPtr)
+    (\cbPtr -> withContext context (flip _ssl_ctx_set_keylog_callback cbPtr) >> action)
 
 data {-# CTYPE "openssl/ssl.h" "SSL" #-} SSL_
 -- | This is the type of an SSL connection

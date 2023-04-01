@@ -642,11 +642,17 @@ sslIOInner loc f ptr nbytes ssl
 -- | Try to read the given number of bytes from an SSL connection. On EOF an
 --   empty ByteString is returned. If the connection dies without a graceful
 --   SSL shutdown, an exception is raised.
+--
+-- NOTE: The returned bytestring could be shorter than the size requested, see:
+-- https://www.openssl.org/docs/man3.0/man3/SSL_read.html
 read :: SSL -> Int -> IO B.ByteString
 read ssl nBytes = sslBlock (`tryRead` nBytes) ssl
 
 -- | Try to read the given number of bytes from an SSL connection
 --   without blocking.
+--
+-- NOTE: The returned bytestring could be shorter than the size requested, see:
+-- https://www.openssl.org/docs/man3.0/man3/SSL_read.html
 tryRead :: SSL -> Int -> IO (SSLResult B.ByteString)
 tryRead ssl nBytes
     = do (bs, result) <- B.createAndTrim' nBytes $ \bufPtr ->

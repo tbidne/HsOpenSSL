@@ -23,7 +23,9 @@ data SSLOption
     | SSL_OP_NETSCAPE_CHALLENGE_BUG
       -- | As of OpenSSL 0.9.8q and 1.0.0c, this option has no effect.
     | SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG
+      -- | As of OpenSSL 1.0.1h and 1.0.2, this option has no effect.
     | SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER
 #if defined(SSL_OP_SAFARI_ECDHE_ECDSA_BUG)
       -- | Don't prefer ECDHE-ECDSA ciphers when the client appears to
@@ -31,8 +33,11 @@ data SSLOption
       -- ECDHE-ECDSA ciphers.
     | SSL_OP_SAFARI_ECDHE_ECDSA_BUG
 #endif
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_SSLEAY_080_CLIENT_DH_BUG
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_TLS_D5_BUG
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_TLS_BLOCK_PADDING_BUG
 #if defined(SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS)
       -- | Disables a countermeasure against a SSL 3.0/TLS 1.0
@@ -47,7 +52,7 @@ data SSLOption
       -- a workaround for some implementations.
     | SSL_OP_TLSEXT_PADDING
 #endif
-      -- | All of the above bug workarounds.
+      -- | Default set of options
     | SSL_OP_ALL
 #if defined(SSL_OP_TLS_ROLLBACK_BUG)
       -- | Disable version rollback attack detection.
@@ -63,25 +68,9 @@ data SSLOption
       -- the version rollback protection.)
     | SSL_OP_TLS_ROLLBACK_BUG
 #endif
-      -- | Always create a new key when using temporary/ephemeral DH
-      -- parameters. This option must be used to prevent small
-      -- subgroup attacks, when the DH parameters were not generated
-      -- using \"strong\" primes (e.g. when using DSA-parameters). If
-      -- \"strong\" primes were used, it is not strictly necessary to
-      -- generate a new DH key during each handshake but it is also
-      -- recommended. 'SSL_OP_SINGLE_DH_USE' should therefore be enabled
-      -- whenever temporary/ephemeral DH parameters are used.
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_SINGLE_DH_USE
-      -- | Always use ephemeral (temporary) RSA key when doing RSA
-      -- operations. According to the specifications this is only
-      -- done, when a RSA key can only be used for signature
-      -- operations (namely under export ciphers with restricted RSA
-      -- keylength). By setting this option, ephemeral RSA keys are
-      -- always used. This option breaks compatibility with the
-      -- SSL/TLS specifications and may lead to interoperability
-      -- problems with clients and should therefore never be
-      -- used. Ciphers with DHE (ephemeral Diffie-Hellman) key
-      -- exchange should be used instead.
+      -- | As of OpenSSL 1.0.1k and 1.0.2, this option has no effect.
     | SSL_OP_EPHEMERAL_RSA
 #if defined(SSL_OP_CIPHER_SERVER_PREFERENCE)
       -- | When choosing a cipher, use the server's preferences
@@ -93,20 +82,37 @@ data SSLOption
       -- the client chooses.
     | SSL_OP_CIPHER_SERVER_PREFERENCE
 #endif
+      -- | As of OpenSSL 1.0.1 this option has no effect.
     | SSL_OP_PKCS1_CHECK_1
+      -- | As of OpenSSL 1.0.1 this option has no effect.
     | SSL_OP_PKCS1_CHECK_2
-      -- | If we accept a netscape connection, demand a client cert,
-      -- have a non-self-signed CA which does not have its CA in
-      -- netscape, and the browser has a cert, it will
-      -- crash/hang. Works for 3.x and 4.xbeta
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_NETSCAPE_CA_DN_BUG
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG
-      -- | Do not use the SSLv2 protocol.
+      -- | As of OpenSSL 1.1.0 this option has no effect.
     | SSL_OP_NO_SSLv2
       -- | Do not use the SSLv3 protocol.
+      -- As of OpenSSL 1.1.0, this option is deprecated
     | SSL_OP_NO_SSLv3
       -- | Do not use the TLSv1 protocol.
+      -- As of OpenSSL 1.1.0, this option is deprecated
     | SSL_OP_NO_TLSv1
+      -- | Do not use the TLSv1.1 protocol.
+      -- As of OpenSSL 1.1.0, this option is deprecated
+    | SSL_OP_NO_TLSv1_1
+      -- | Do not use the TLSv1.2 protocol.
+      -- As of OpenSSL 1.1.0, this option is deprecated
+    | SSL_OP_NO_TLSv1_2
+      -- | Do not use the TLSv1.3 protocol.
+      -- As of OpenSSL 1.1.0, this option is deprecated
+    | SSL_OP_NO_TLSv1_3
+      -- | Do not use the DTLSv1 protocol.
+      -- As of OpenSSL 1.1.0, this option is deprecated
+    | SSL_OP_NO_DTLSv1
+      -- | Do not use the DTLSv1.2 protocol.
+      -- As of OpenSSL 1.1.0, this option is deprecated
+    | SSL_OP_NO_DTLSv1_2
 #if defined(SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION)
       -- | When performing renegotiation as a server, always start a
       -- new session (i.e., session resumption requests are only
@@ -136,6 +142,41 @@ data SSLOption
       -- for more details.
     | SSL_OP_LEGACY_SERVER_CONNECT
 #endif
+#if defined(SSL_OP_NO_EXTENDED_MASTER_SECRET)
+      -- | Disable Extended master secret.
+      -- Only available on OpenSSL 3.0.0 and later.
+    | SSL_OP_NO_EXTENDED_MASTER_SECRET
+#endif
+#if defined(SSL_OP_CLEANSE_PLAINTEXT)
+      -- | Cleanse plaintext copies of data.
+      -- Only available on OpenSSL 3.0.0 and later.
+    | SSL_OP_CLEANSE_PLAINTEXT
+#endif
+#if defined(SSL_OP_ENABLE_KTLS)
+      -- | Enble support for Kernel TLS
+      -- Only available on OpenSSL 3.0.0 and later
+    | SSL_OP_ENABLE_KTLS
+#endif
+#if defined(SSL_OP_IGNORE_UNEXPECTED_EOF)
+    | SSL_OP_IGNORE_UNEXPECTED_EOF
+#endif
+#if defined(SSL_OP_ALLOW_CLIENT_RENEGOTIATION)
+    | SSL_OP_ALLOW_CLIENT_RENEGOTIATION
+#endif
+#if defined(SSL_OP_DISABLE_TLSEXT_CA_NAMES)
+    | SSL_OP_DISABLE_TLSEXT_CA_NAMES
+#endif
+    | SSL_OP_CISCO_ANYCONNECT
+    | SSL_OP_NO_ANTI_REPLAY
+    | SSL_OP_PRIORITIZE_CHACHA
+    | SSL_OP_ALLOW_NO_DHE_KEX
+    | SSL_OP_NO_ENCRYPT_THEN_MAC
+    | SSL_OP_NO_QUERY_MTU
+    | SSL_OP_COOKIE_EXCHANGE
+    | SSL_OP_NO_COMPRESSION
+    | SSL_OP_ENABLE_MIDDLEBOX_COMPAT
+    | SSL_OP_NO_RENEGOTIATION
+    | SSL_OP_CRYPTOPRO_TLSEXT_BUG
       deriving (Eq, Ord, Show, Typeable)
 
 optionToIntegral :: Integral a => SSLOption -> a
@@ -172,6 +213,17 @@ optionToIntegral SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG        = #const SSL_OP_N
 optionToIntegral SSL_OP_NO_SSLv2                               = #const SSL_OP_NO_SSLv2
 optionToIntegral SSL_OP_NO_SSLv3                               = #const SSL_OP_NO_SSLv3
 optionToIntegral SSL_OP_NO_TLSv1                               = #const SSL_OP_NO_TLSv1
+optionToIntegral SSL_OP_NO_TLSv1_1                             = #const SSL_OP_NO_TLSv1_1
+optionToIntegral SSL_OP_NO_TLSv1_2                             = #const SSL_OP_NO_TLSv1_2
+#if defined(SSL_OP_NO_TLSv1_3)
+optionToIntegral SSL_OP_NO_TLSv1_3                             = #const SSL_OP_NO_TLSv1_3
+#endif
+#if defined(SSL_OP_NO_DTLSv1)
+optionToIntegral SSL_OP_NO_DTLSv1                              = #const SSL_OP_NO_DTLSv1
+#endif
+#if defined(SSL_OP_NO_DTLSv1_2)
+optionToIntegral SSL_OP_NO_DTLSv1_2                            = #const SSL_OP_NO_DTLSv1_2
+#endif
 #if defined(SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION)
 optionToIntegral SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION = #const SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION
 #endif
@@ -182,3 +234,32 @@ optionToIntegral SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION      = #const SSL_OP_A
 #if defined(SSL_OP_LEGACY_SERVER_CONNECT)
 optionToIntegral SSL_OP_LEGACY_SERVER_CONNECT                  = #const SSL_OP_LEGACY_SERVER_CONNECT
 #endif
+#if defined(SSL_OP_NO_EXTENDED_MASTER_SECRET)
+optionToIntegral SSL_OP_NO_EXTENDED_MASTER_SECRET              = #const SSL_OP_NO_EXTENDED_MASTER_SECRET
+#endif
+#if defined(SSL_OP_CLEANSE_PLAINTEXT)
+optionToIntegral SSL_OP_CLEANSE_PLAINTEXT                      = #const SSL_OP_CLEANSE_PLAINTEXT
+#endif
+#if defined(SSL_OP_ENABLE_KTLS)
+optionToIntegral SSL_OP_ENABLE_KTLS                            = #const SSL_OP_ENABLE_KTLS
+#endif
+#if defined(SSL_OP_IGNORE_UNEXPECTED_EOF)
+optionToIntegral SSL_OP_IGNORE_UNEXPECTED_EOF                  = #const SSL_OP_IGNORE_UNEXPECTED_EOF
+#endif
+#if defined(SSL_OP_ALLOW_CLIENT_RENEGOTIATION)
+optionToIntegral SSL_OP_ALLOW_CLIENT_RENEGOTIATION             = #const SSL_OP_ALLOW_CLIENT_RENEGOTIATION
+#endif
+#if defined(SSL_OP_DISABLE_TLSEXT_CA_NAMES)
+optionToIntegral SSL_OP_DISABLE_TLSEXT_CA_NAMES                = #const SSL_OP_DISABLE_TLSEXT_CA_NAMES
+#endif
+optionToIntegral SSL_OP_NO_ANTI_REPLAY                         = #const SSL_OP_NO_ANTI_REPLAY
+optionToIntegral SSL_OP_PRIORITIZE_CHACHA                      = #const SSL_OP_PRIORITIZE_CHACHA
+optionToIntegral SSL_OP_ENABLE_MIDDLEBOX_COMPAT                = #const SSL_OP_ENABLE_MIDDLEBOX_COMPAT
+optionToIntegral SSL_OP_NO_ENCRYPT_THEN_MAC                    = #const SSL_OP_NO_ENCRYPT_THEN_MAC
+optionToIntegral SSL_OP_ALLOW_NO_DHE_KEX                       = #const SSL_OP_ALLOW_NO_DHE_KEX
+optionToIntegral SSL_OP_NO_QUERY_MTU                           = #const SSL_OP_NO_QUERY_MTU 
+optionToIntegral SSL_OP_COOKIE_EXCHANGE                        = #const SSL_OP_COOKIE_EXCHANGE
+optionToIntegral SSL_OP_NO_COMPRESSION                         = #const SSL_OP_NO_COMPRESSION
+optionToIntegral SSL_OP_NO_RENEGOTIATION                       = #const SSL_OP_NO_RENEGOTIATION
+optionToIntegral SSL_OP_CRYPTOPRO_TLSEXT_BUG                   = #const SSL_OP_CRYPTOPRO_TLSEXT_BUG
+optionToIntegral SSL_OP_CISCO_ANYCONNECT                       = #const SSL_OP_CISCO_ANYCONNECT

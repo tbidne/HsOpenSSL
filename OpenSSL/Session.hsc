@@ -403,6 +403,9 @@ foreign import capi "openssl/ssl.h SSL_CTX_set_keylog_callback" _ssl_ctx_set_key
 -- string containing the key material in the format used by NSS for its
 -- SSLKEYLOGFILE debugging output. To recreate that file, the key logging
 -- callback should log line, followed by a newline.
+--
+-- FIXME: Not re-entrant (ignores previous callback and resets it to
+-- nullFunPtr on exit)
 withContextSetKeylogCallback :: SSLContext -> (String -> IO ()) -> IO () -> IO ()
 withContextSetKeylogCallback context cb action = do
   -- There doesn't seem to be a way to go from 'Ptr SSL_' to 'SSL', so let's

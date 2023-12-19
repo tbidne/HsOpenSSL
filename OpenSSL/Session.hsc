@@ -406,7 +406,7 @@ foreign import capi "openssl/ssl.h SSL_CTX_set_keylog_callback" _ssl_ctx_set_key
 --
 -- FIXME: Not re-entrant (ignores previous callback and resets it to
 -- nullFunPtr on exit)
-withContextSetKeylogCallback :: SSLContext -> (String -> IO ()) -> IO () -> IO ()
+withContextSetKeylogCallback :: SSLContext -> (String -> IO ()) -> IO a -> IO a
 withContextSetKeylogCallback context cb action = do
   -- There doesn't seem to be a way to go from 'Ptr SSL_' to 'SSL', so let's
   -- just ignore it in the haskell callback.

@@ -32,6 +32,7 @@ module OpenSSL.X509.Request
     , setPublicKey
 
     , addExtensions
+    , addExtensionTox509
     )
     where
 
@@ -100,6 +101,8 @@ foreign import capi unsafe "openssl/x509v3.h X509V3_EXT_nconf_nid"
 foreign import capi unsafe "openssl/x509.h X509_REQ_add_extensions"
         _req_add_extensions :: Ptr X509_REQ -> Ptr STACK -> IO CInt
 
+foreign import capi unsafe "openssl/x509.h X509_add_ext"
+    _X509_add_ext :: Ptr Cert.X509_ -> Ptr X509_EXT -> CInt -> IO CInt
 
 -- |@'newX509Req'@ creates an empty certificate request. You must set
 -- the following properties to and sign it (see 'signX509Req') to
@@ -296,3 +299,17 @@ makeX509FromReq req caCert
          Cert.setPublicKey   cert =<< getPublicKey req
 
          return cert
+
+addExtensionTox509 :: X509 -> Int -> String -> IO Bool
+addExtensionTox509 (Cert.X509 certFPtr) nid value = do
+    -- Context and config pointers are set to nullPtr for simplicity.
+    -- Depending on your use case, you might need to provide actual values.
+    result <- withForeignPtr certFPtr $ \certPtr ->
+              withCString value $ \cValue -> do
+                  extPtr <- _ext_create nullPtr nullPtr (fromIntegral nid) cValue
+                  if extPtr /= nullPtr
+                      then do
+                          res <- _X509_add_ext certPtr extPtr (-1)  -- Add to the end
+                          return (res == 0)
+                      else return False
+    return result

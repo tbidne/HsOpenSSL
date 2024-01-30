@@ -5,7 +5,7 @@
 -- |An interface to X.509 certificate.
 module OpenSSL.X509
     ( -- * Type
-      X509
+      X509(..)
     , X509_
 
       -- * Functions to manipulate certificate

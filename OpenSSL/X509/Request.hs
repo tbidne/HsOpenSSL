@@ -32,7 +32,7 @@ module OpenSSL.X509.Request
     , setPublicKey
 
     , addExtensions
-    , addExtensionTox509
+    , addExtensionToX509
     )
     where
 
@@ -300,8 +300,8 @@ makeX509FromReq req caCert
 
          return cert
 
-addExtensionTox509 :: X509 -> Int -> String -> IO Bool
-addExtensionTox509 (Cert.X509 certFPtr) nid value = do
+addExtensionToX509 :: X509 -> Int -> String -> IO Bool
+addExtensionToX509 (Cert.X509 certFPtr) nid value = do
     -- Context and config pointers are set to nullPtr for simplicity.
     -- Depending on your use case, you might need to provide actual values.
     result <- withForeignPtr certFPtr $ \certPtr ->

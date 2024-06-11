@@ -4,11 +4,13 @@ module OpenSSL.Utils
     , failIf
     , failIf_
     , raiseOpenSSLError
+    , clearErrorStack
     , toHex
     , fromHex
     , peekCStringCLen
     )
     where
+import Control.Monad
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.Ptr
@@ -40,6 +42,12 @@ failIf_ f a
 
 raiseOpenSSLError :: IO a
 raiseOpenSSLError = getError >>= errorString >>= fail
+
+
+clearErrorStack :: IO ()
+clearErrorStack = do
+  e <- getError
+  when (e /= 0) clearErrorStack
 
 -- | Convert an integer to a hex string
 toHex :: (Num i, Bits i) => i -> String

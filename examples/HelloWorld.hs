@@ -15,9 +15,9 @@ import Text.Printf
 
 
 main = withOpenSSL $
-       do putStrLn "cipher: DES-CBC"
-          des <- liftM fromJust $ getCipherByName "DES-CBC"
-
+       do putStrLn "cipher: DES3"
+          des <- liftM fromJust $ getCipherByName "DES3"
+           
           putStrLn "generating RSA keypair..."
           rsa <- generateRSAKey 512 65537 Nothing
 

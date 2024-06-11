@@ -274,7 +274,9 @@ verifyX509 x509 key
     where
       interpret :: CInt -> IO VerifyStatus
       interpret 1 = return VerifySuccess
-      interpret 0 = return VerifyFailure
+      interpret 0 = do
+        clearErrorStack
+        return VerifyFailure
       interpret _ = raiseOpenSSLError
 
 -- |@'printX509' cert@ translates a certificate into human-readable

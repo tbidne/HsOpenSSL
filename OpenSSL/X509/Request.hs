@@ -300,11 +300,12 @@ makeX509FromReq req caCert
 
          return cert
 
--- Add Extensions to certificate (when Server accepting certs requires it)
--- e.g. :
--- addExtensionToX509 cert1 87 "CA:FALSE"
--- addExtensionToX509 cert1 85 "critical,serverAuth, clientAuth" - when this extension field is critical
-
+-- | Add Extensions to a certificate (when the Server accepting certs requires it)
+-- E.g.:
+--
+-- > addExtensionToX509 cert1 87 "CA:FALSE"
+-- > addExtensionToX509 cert1 85 "critical,serverAuth, clientAuth" -- when this extension field is critical
+--
 addExtensionToX509 :: X509 -> Int -> String -> IO Bool
 addExtensionToX509 (Cert.X509 certFPtr) nid value = do
     -- Context and config pointers are set to nullPtr for simplicity.

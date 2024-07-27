@@ -411,10 +411,10 @@ newBuffer bufSize
 
 {- mem ---------------------------------------------------------------------- -}
 
-foreign import capi unsafe "openssl/bio.h BIO_s_mem"
+foreign import ccall unsafe "openssl/bio.h BIO_s_mem"
         s_mem :: IO (Ptr BIO_METHOD)
 
-foreign import capi unsafe "openssl/bio.h BIO_new_mem_buf"
+foreign import ccall unsafe "openssl/bio.h BIO_new_mem_buf"
         _new_mem_buf :: Ptr CChar -> CInt -> IO (Ptr BIO_)
 
 
@@ -466,7 +466,7 @@ newConstMemLBS lbs
 
 {- null --------------------------------------------------------------------- -}
 
-foreign import capi unsafe "openssl/bio.h BIO_s_null"
+foreign import ccall unsafe "openssl/bio.h BIO_s_null"
         s_null :: IO (Ptr BIO_METHOD)
 
 -- |@'newNullBIO'@ creates a null BIO sink\/source. Data written to

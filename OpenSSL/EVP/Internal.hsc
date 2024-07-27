@@ -66,7 +66,7 @@ import qualified Data.ByteString.Lazy.Internal as L8
 import Control.Applicative ((<$>))
 #endif
 import Control.Exception (mask, mask_, bracket, onException)
-import Foreign.C.Types (CChar)
+import Foreign.C.Types (CChar, CUChar)
 #if MIN_VERSION_base(4,5,0)
 import Foreign.C.Types (CInt(..), CUInt(..), CSize(..))
 #else
@@ -335,10 +335,10 @@ foreign import capi unsafe "openssl/hmac.h HMAC_Init"
   _hmac_init :: Ptr HMAC_CTX -> Ptr () -> CInt -> Ptr EVP_MD -> IO CInt
 
 foreign import capi unsafe "openssl/hmac.h HMAC_Update"
-  _hmac_update :: Ptr HMAC_CTX -> Ptr CChar -> CInt -> IO CInt
+  _hmac_update :: Ptr HMAC_CTX -> Ptr CUChar -> CSize -> IO CInt
 
 foreign import capi unsafe "openssl/hmac.h HMAC_Final"
-  _hmac_final :: Ptr HMAC_CTX -> Ptr CChar -> Ptr CInt -> IO CUInt
+  _hmac_final :: Ptr HMAC_CTX -> Ptr CUChar -> Ptr CUInt -> IO CUInt
 
 foreign import capi unsafe "HsOpenSSL &HsOpenSSL_HMAC_CTX_free"
   _hmac_ctx_free :: FunPtr (Ptr HMAC_CTX -> IO ())

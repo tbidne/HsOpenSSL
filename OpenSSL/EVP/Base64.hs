@@ -22,9 +22,9 @@ import qualified Data.ByteString.Char8 as B8
 import qualified Data.ByteString.Lazy.Char8 as L8
 import           Data.List
 #if MIN_VERSION_base(4,5,0)
-import           Foreign.C.Types (CChar(..), CInt(..))
+import           Foreign.C.Types (CUChar(..), CInt(..))
 #else
-import           Foreign.C.Types (CChar, CInt)
+import           Foreign.C.Types (CUChar, CInt)
 #endif
 import           Foreign.Ptr (Ptr, castPtr)
 import           System.IO.Unsafe (unsafePerformIO)
@@ -50,7 +50,7 @@ nextBlock minLen (xs, src)
 {- encode -------------------------------------------------------------------- -}
 
 foreign import capi unsafe "openssl/evp.h EVP_EncodeBlock"
-        _EncodeBlock :: Ptr CChar -> Ptr CChar -> CInt -> IO CInt
+        _EncodeBlock :: Ptr CUChar -> Ptr CUChar -> CInt -> IO CInt
 
 
 encodeBlock :: B8.ByteString -> B8.ByteString
@@ -59,7 +59,7 @@ encodeBlock inBS
       unsafeUseAsCStringLen inBS $ \ (inBuf, inLen) ->
       createAndTrim maxOutLen $ \ outBuf ->
       fmap fromIntegral
-           (_EncodeBlock (castPtr outBuf) inBuf (fromIntegral inLen))
+           (_EncodeBlock (castPtr outBuf) (castPtr inBuf) (fromIntegral inLen))
     where
       maxOutLen = (inputLen `div` 3 + 1) * 4 + 1 -- +1: '\0'
       inputLen  = B8.length inBS
@@ -104,7 +104,7 @@ encodeBase64LBS inLBS
 {- decode -------------------------------------------------------------------- -}
 
 foreign import capi unsafe "openssl/evp.h EVP_DecodeBlock"
-        _DecodeBlock :: Ptr CChar -> Ptr CChar -> CInt -> IO CInt
+        _DecodeBlock :: Ptr CUChar -> Ptr CUChar -> CInt -> IO CInt
 
 
 decodeBlock :: B8.ByteString -> B8.ByteString
@@ -113,7 +113,7 @@ decodeBlock inBS
       unsafePerformIO $
       unsafeUseAsCStringLen inBS $ \ (inBuf, inLen) ->
       createAndTrim (B8.length inBS) $ \ outBuf ->
-      _DecodeBlock (castPtr outBuf) inBuf (fromIntegral inLen)
+      _DecodeBlock (castPtr outBuf) (castPtr inBuf) (fromIntegral inLen)
            >>= \ outLen -> return (fromIntegral outLen - paddingLen)
     where
       paddingLen :: Int

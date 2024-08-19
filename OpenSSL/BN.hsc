@@ -244,10 +244,10 @@ withBN :: Integer -> (BigNum -> IO a) -> IO a
 withBN dec m = bracket (integerToBN dec) (_free . unwrapBN) m
 
 foreign import capi unsafe "openssl/bn.h BN_bn2mpi"
-        _bn2mpi :: Ptr BIGNUM -> Ptr CChar -> IO CInt
+        _bn2mpi :: Ptr BIGNUM -> Ptr CUChar -> IO CInt
 
 foreign import capi unsafe "openssl/bn.h BN_mpi2bn"
-        _mpi2bn :: Ptr CChar -> CInt -> Ptr BIGNUM -> IO (Ptr BIGNUM)
+        _mpi2bn :: Ptr CUChar -> CInt -> Ptr BIGNUM -> IO (Ptr BIGNUM)
 
 -- |This is an alias to 'bnToInteger'.
 peekBN :: BigNum -> IO Integer
@@ -265,13 +265,13 @@ bnToMPI bn = do
   bytes <- _bn2mpi (unwrapBN bn) nullPtr
   allocaBytes (fromIntegral bytes) (\buffer -> do
     _ <- _bn2mpi (unwrapBN bn) buffer
-    BS.packCStringLen (buffer, fromIntegral bytes))
+    BS.packCStringLen (castPtr buffer, fromIntegral bytes))
 
 -- | Convert an MPI into a BigNum. See bnToMPI for details of the format
 mpiToBN :: BS.ByteString -> IO BigNum
 mpiToBN mpi = do
   BS.useAsCStringLen mpi (\(ptr, len) -> do
-    _mpi2bn ptr (fromIntegral len) nullPtr) >>= return . wrapBN
+    _mpi2bn (castPtr ptr) (fromIntegral len) nullPtr) >>= return . wrapBN
 
 -- | Convert an Integer to an MPI. See bnToMPI for the format
 integerToMPI :: Integer -> IO BS.ByteString

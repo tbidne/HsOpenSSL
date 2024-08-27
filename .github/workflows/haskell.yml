@@ -27,11 +27,21 @@ jobs:
       LD_LIBRARY_PATH: ${{ (matrix.os != 'windows-latest' && '/usr/local/lib') || '' }}
 
     steps:
+    - uses: haskell-actions/setup@v2
+      with:
+        ghc-version: ${{ matrix.ghc }}
+
     - name: "WIN: Install System Dependencies via pacman (msys2)"
       if: runner.os == 'Windows'
       run: |
          # ghcup should be installed on current GHA Windows runners. Let's use ghcup to run
          # pacman, to install the necessary dependencies, ...
+         echo HEY
+         ghcup --version
+         echo LISTEN
+         pacman --version
+         echo $PATH
+
          ghcup run -- pacman --noconfirm -S `
             mingw-w64-x86_64-pkg-config `
             mingw-w64-x86_64-openssl `
@@ -45,14 +55,20 @@ jobs:
     # this seems to break something. It _must_ come after the pacman setup
     # above. It appears as if PATHEXT is set _after_ ghcup install ghc/cabal, and
     # as such we'd need pacman.exe instead.
-    - name: Setup Haskell
-      run: |
-        # Use GHCUP to manage ghc/cabal
-        ghcup install ghc --set ${{ matrix.ghc }}
-        ghcup install cabal --set 3.6.2.0
+    # - name: Setup Haskell
+    #   run: |
+    #     # Use GHCUP to manage ghc/cabal
+    #     echo HEY
+    #     whereis ghcup
+    #     echo LISTEN
+    #     echo $PATH
+    #     echo YOU
 
-        ghc --version
-        cabal --version
+    #     ghcup install ghc --set ${{ matrix.ghc }}
+    #     ghcup install cabal --set 3.6.2.0
+
+    #     ghc --version
+    #     cabal --version
 
     - name: "WIN: fixup cabal config"
       if: runner.os == 'Windows'

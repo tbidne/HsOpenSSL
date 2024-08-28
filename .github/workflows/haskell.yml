@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.sys.os }}
 
     strategy:
       fail-fast: false
@@ -16,45 +16,74 @@ jobs:
         n: [1]
 
         ghc: ["9.4.8"]
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        #os: [ubuntu-latest, macos-latest, windows-latest]
+        sys:
+        - { os: ubuntu-latest, shell: bash }
+        - { os: macos-latest, shell: bash }
+        - { os: windows-latest, shell: 'msys2 {0}' }
+
+    defaults:
+      run:
+        shell: ${{ matrix.sys.shell }}
 
     env:
       # OpenSSL is installed in a non-standard location in MacOS. See
       # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-latest-Readme.md
-      PKG_CONFIG_PATH: ${{ (matrix.os == 'macos-latest' && '/usr/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig') || (matrix.os == 'ubuntu-latest' && '/usr/lib/pkgconfig:/usr/local/lib/pkgconfig') || '' }}
+      PKG_CONFIG_PATH: ${{ (matrix.sys.os == 'macos-latest' && '/usr/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig') || (matrix.sys.os == 'ubuntu-latest' && '/usr/lib/pkgconfig:/usr/local/lib/pkgconfig') || '' }}
       
       # FIXME: this is arguably a bug, and pkg-config should return the right values!
-      LD_LIBRARY_PATH: ${{ (matrix.os != 'windows-latest' && '/usr/local/lib') || '' }}
+      LD_LIBRARY_PATH: ${{ (matrix.sys.os != 'windows-latest' && '/usr/local/lib') || '' }}
 
     steps:
     - uses: haskell-actions/setup@v2
       with:
         ghc-version: ${{ matrix.ghc }}
 
-    - name: "WIN: Install System Dependencies via pacman (msys2)"
+    - name: "WIN: Setup msys2"
+      uses: msys2/setup-msys2@v2
+      if: runner.os == 'Windows'
+      with:
+        #msystem: UCRT64
+        #update: true
+        install: >-
+          mingw-w64-x86_64-pkg-config
+          mingw-w64-x86_64-openssl
+          base-devel
+          autoconf-wrapper
+          autoconf
+          automake
+          libtool
+          make
+
+    - name: "WIN: blah"
       if: runner.os == 'Windows'
       run: |
-         echo HEY
-         which pacman || echo "pacman not found"
-         echo $PATH
-         ls C:\msys64
-         echo LISTEN
-         ls C:\msys64\mingw32\bin
-         ls C:\msys64\mingw64\bin
-         tree C:\msys64
-         echo HEEYYY
-         dir /s /b pacman
-         # ghcup should be installed on current GHA Windows runners. Let's use ghcup to run
-         # pacman, to install the necessary dependencies, ...
-         ghcup run -- pacman --noconfirm -S `
-            mingw-w64-x86_64-pkg-config `
-            mingw-w64-x86_64-openssl `
-            base-devel `
-            autoconf-wrapper `
-            autoconf `
-            automake `
-            libtool `
-            make
+        which pacman || echo "pacman not found"
+
+    # - name: "WIN: Install System Dependencies via pacman (msys2)"
+    #   if: runner.os == 'Windows'
+    #   run: |
+    #      echo HEY
+    #      which pacman || echo "pacman not found"
+    #      echo $PATH
+    #      ls C:\msys64
+    #      echo LISTEN
+    #      ls C:\msys64\mingw32\bin
+    #      ls C:\msys64\mingw64\bin
+    #      tree C:\msys64
+    #      echo HEEYYY
+    #      dir /s /b pacman
+    #      # ghcup should be installed on current GHA Windows runners. Let's use ghcup to run
+    #      # pacman, to install the necessary dependencies, ...
+    #      ghcup run -- pacman --noconfirm -S `
+    #         mingw-w64-x86_64-pkg-config `
+    #         mingw-w64-x86_64-openssl `
+    #         base-devel `
+    #         autoconf-wrapper `
+    #         autoconf `
+    #         automake `
+    #         libtool `
+    #         make
 
     - name: "WIN: fixup cabal config"
       if: runner.os == 'Windows'

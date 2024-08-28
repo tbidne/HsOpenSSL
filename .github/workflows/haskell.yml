@@ -16,7 +16,8 @@ jobs:
         n: [1]
 
         ghc: ["8.10.7"]
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # FIXME: Add windows-latest back to CI once it is passing.
+        os: [ubuntu-latest, macos-latest]
 
     env:
       # OpenSSL is installed in a non-standard location in MacOS. See

@@ -34,6 +34,16 @@ jobs:
     - name: "WIN: Install System Dependencies via pacman (msys2)"
       if: runner.os == 'Windows'
       run: |
+         echo HEY
+         which pacman || echo "pacman not found"
+         echo $PATH
+         ls C:\msys64
+         echo LISTEN
+         ls C:\msys64\mingw32\bin
+         ls C:\msys64\mingw64\bin
+         tree C:\msys64
+         echo HEEYYY
+         dir /s /b pacman
          # ghcup should be installed on current GHA Windows runners. Let's use ghcup to run
          # pacman, to install the necessary dependencies, ...
          ghcup run -- pacman --noconfirm -S `
